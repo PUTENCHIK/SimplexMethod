@@ -1,0 +1,13 @@
+@font-face {
+    font-family: "Peridot";
+    src: url("../fonts/PeridotDemoPE-WideExtraBoldItalic.otf") format("opentype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "Peridot";
+    src: url("../fonts/PeridotDemoPE-Light.otf") format("opentype");
+    font-style: normal;
+    font-weight: normal;
+}

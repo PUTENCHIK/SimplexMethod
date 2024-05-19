@@ -1,0 +1,32 @@
+@import "common.css";
+@import "header.css";
+
+.instruments-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 600px;
+}
+
+ol {
+    font-size: 20px;
+}
+
+.instruments-container * {
+    width: 100%;
+}
+
+.instruments-container > h1 {
+    margin-bottom: 10px;
+}
+
+.instruments-container .list-element {
+    display: block;
+    padding: 5px 0 5px 10px;
+    font-size: 20px;
+
+    border-radius: 5px;
+}
+
+.instruments-container .list-element:hover {
+    background-color: #e3e3e3;
+}

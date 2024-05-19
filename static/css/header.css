@@ -1,0 +1,38 @@
+.header {
+    display: flex;
+    flex-wrap: nowrap;
+    position: relative;
+    width: calc(100% + 16px);
+    height: 70px;
+    top: -8px;
+    left: -8px;
+
+    background-color: #b4cfff;
+}
+
+.header__content {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 1280px;
+    height: 100%;
+    align-items: center;
+
+    margin: 0 auto;
+}
+
+.header__content > :not(:first-child) {
+    margin-left: 20px;
+}
+
+.header__content > :last-child {
+    margin-left: auto;
+}
+
+img.logo {
+    display: block;
+    height: 60px;
+}
+
+.site-title {
+    font-size: 24px;
+}
