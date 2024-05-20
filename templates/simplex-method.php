@@ -93,10 +93,8 @@ $consts = get_consts();
             </div>
 
 			<?php if ($app->check_state(AppStates::$show_answer)): ?>
-				<div>
-					<?php
-						print_r($app->data->toArray());
-					?>
+				<div class="data-container container">
+					<div></div>
 				</div>
 			<?php endif ?>
         </div>
