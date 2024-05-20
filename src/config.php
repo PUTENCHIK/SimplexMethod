@@ -1,11 +1,12 @@
 <?php
 
+namespace App;
+
 function get_consts(): array {
     return [
-        'images_path' => '../static/images',
-        'min_inputs' => 2,
-        'max_inputs' => 10,
+        'min_variables' => 2,
+        'max_variables' => 10,
+        'min_limits' => 2,
+        'max_limits' => 10,
     ];
 }
-
-return;

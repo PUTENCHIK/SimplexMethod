@@ -17,6 +17,16 @@
     margin-bottom: 20px;
 }
 
+.settings {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.settings > form {
+    margin: 0;
+}
+
 .settings-box {
     display: flex;
     flex-wrap: wrap;
@@ -47,10 +57,52 @@
 
 input[type="text"].coefficient {
     width: 100px;
+    padding: 3px 0 3px 5px;
 }
 
 .buttons-box {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     width: 100%;
+}
+
+.buttons-box > form {
+    display: block;
+}
+
+.buttons-box :first-child {
+    margin-left: auto;
+}
+
+.buttons-box > :not(:last-child) {
+    margin-right: 20px;
+}
+
+.buttons-box > :last-child {
+    margin-right: auto;
+}
+
+.limits-box {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.limits-box > div {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.limits-box > div:not(:last-child) {
+    margin-bottom: 30px;
+}
+.limits-box > div > select,
+.limits-box > div > input:last-child {
+    display: block;
+    margin-left: 10px;
+
 }

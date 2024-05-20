@@ -1,6 +1,6 @@
 <?php
 
-namespace app\html;
+namespace App;
 
 include_once 'Element.php';
 include_once 'InputRow.php';

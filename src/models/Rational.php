@@ -1,6 +1,6 @@
 <?php
 
-namespace src\models;
+namespace App;
 
 class Rational {
     private int $num;

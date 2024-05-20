@@ -1,7 +1,6 @@
 <?php
 
-
-namespace app\html;
+namespace App;
 
 include_once "Element.php";
 
@@ -18,7 +17,7 @@ class InputRow extends Element {
         $html = "<div>";
         for ($i = 1; $i <= $this->amount; $i++) {
             $name = is_null($this->prename) ? "" : "name='$this->prename-$i'";
-            $html .= "<input class='coefficient' type='text' $name max='99999'> <span>x<sub>$i</sub></span>";
+            $html .= "<input class='coefficient' type='text' $name> <span>x<sub>$i</sub></span>";
             if ($i !== $this->amount) {
                 $html .= " + ";
             }

@@ -1,7 +1,6 @@
 <?php
 
-
-namespace app\html;
+namespace App;
 
 include_once "Element.php";
 
@@ -13,14 +12,11 @@ class Header extends Element {
     }
 
     public function render(): string {
-        include "src/config.php";
-        $img_path = get_consts()['images_path'];
-
         return "
             <div class='header'>
                 <div class='header__content'>
-                    <img class='logo' src='$img_path/calculator.png' alt='logo'>
-                    <div class='site-title'>Симплекс метод</div>
+                    <img class='logo' src='../static/images/calculator.png' alt='logo'>
+                    <div class='site-title'>$this->page_name</div>
                     <div>О сайте</div>
                 </div>
             </div>

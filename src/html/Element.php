@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\html;
+namespace App;
 
 
 abstract class Element {
