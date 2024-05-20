@@ -2,13 +2,17 @@
 
 namespace App;
 
-use app\src\models\Rational;
+include_once "src/models/Data.php";
 
-include_once "src/models/Rational.php";
-
-ini_set('display_errors', 1);
 header('Content-Type: text/plain');
 
-$r = new Rational();
+$arr = [
+    '12' => [1, 2],
+    'asdas' => 12312
+];
 
-echo $r . "\n";
+print_r($arr ?? null);
+
+//$data = new Data();
+//
+//echo Data::as_rational('78.345/234');

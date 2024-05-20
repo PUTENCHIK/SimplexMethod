@@ -58,6 +58,7 @@ button:focus {
 
 button > span {
     display: block;
+    margin: auto;
 }
 
 button.primary {

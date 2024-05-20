@@ -2,28 +2,37 @@
 
 namespace App;
 
-include_once "States.php";
+include_once "AppStates.php";
+include_once "Data.php";
 include_once "src/config.php";
 
 class App {
     private int $state;
     private int $n;
     private int $m;
+    public Data $data;
 
     public function __construct() {
-        $this->state = States::$input_values;
-        $this->n = get_consts()['min_variables'];
-        $this->m = get_consts()['min_limits'];
-//        $this->n = 2;
-//        $this->m = 2;
+        $this->state = AppStates::$default_values;
+        $consts = get_consts();
+        $this->n = $consts['min_variables'];
+        $this->m = $consts['min_limits'];
+        $this->data = new Data();
     }
 
     public function getState(): int {
         return $this->state;
     }
 
-    public function setState(string $state): void {
+    public function setState(int $state): void {
         $this->state = $state;
+    }
+
+    public function update_state(): void {
+        $consts = get_consts();
+        if (! $this->check_state(AppStates::$show_answer) and ($this->n !== $consts['min_variables'] or $this->m !== $consts['min_limits'])) {
+            $this->state = AppStates::$input_values;
+        }
     }
 
     public function getN(): int {

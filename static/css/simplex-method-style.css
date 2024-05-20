@@ -17,19 +17,20 @@
     margin-bottom: 20px;
 }
 
-.settings {
+.data-container.settings {
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
 }
 
-.settings > form {
+.data-container.settings > form {
     margin: 0;
 }
 
 .settings-box {
     display: flex;
     flex-wrap: wrap;
+    overflow-x: auto;
 }
 
 .settings-box > label {
@@ -60,6 +61,20 @@ input[type="text"].coefficient {
     padding: 3px 0 3px 5px;
 }
 
+.data-container.inputs {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.data-container.inputs > form {
+    margin: 0;
+}
+
+.data-container.inputs > form > :not(:last-child) {
+    margin-bottom: 20px;
+}
+
 .buttons-box {
     display: flex;
     flex-wrap: wrap;
@@ -68,7 +83,8 @@ input[type="text"].coefficient {
 }
 
 .buttons-box > form {
-    display: block;
+    display: flex;
+    margin-bottom: 0;
 }
 
 .buttons-box :first-child {
