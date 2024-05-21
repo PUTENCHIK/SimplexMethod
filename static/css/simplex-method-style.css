@@ -1,7 +1,7 @@
 @import "common.css";
 @import "header.css";
 
-.main > :not(:last-child) {
+.main > * {
     margin-bottom: 20px;
 }
 
@@ -123,4 +123,33 @@ input[type="text"].coefficient {
     display: block;
     margin-left: 10px;
 
+}
+
+.matrix-box > :not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.matrix {
+    display: table;
+    border-spacing: 20px;
+    border-radius: 20px;
+    border-collapse: separate;
+    outline: 1px solid #808080;
+}
+
+.matrix-row, .matrix-head-row {
+    display: table-row;
+}
+
+.matrix-head-row {
+    font-weight: bold;
+    table-border-color-dark: #808080;
+}
+
+.matrix-head-row > .matrix-cell:not(:last-child) {
+    margin-right: 20px;
+}
+
+.matrix-cell {
+    display: table-cell;
 }

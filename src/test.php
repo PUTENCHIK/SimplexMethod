@@ -6,13 +6,12 @@ include_once "src/models/Data.php";
 
 header('Content-Type: text/plain');
 
-$arr = [
-    '12' => [1, 2],
-    'asdas' => 12312
-];
+$a = '';
 
-print_r($arr ?? null);
-
-//$data = new Data();
-//
-//echo Data::as_rational('78.345/234');
+if (isset($a) and strlen($a) > 0) {
+    echo "okay";
+    echo count_chars($a) > 0;
+}
+else {
+    echo "no";
+}

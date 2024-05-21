@@ -43,8 +43,12 @@ $consts = get_consts();
     <body>
         <?= new Header("Симплекс метод") ?>
 
-        <script src="../static/js/input_listener.js"></script>
         <div class="main">
+            <?php if (! empty($app->getErrors())): ?>
+                <div class="container horizontal error"><?= $app->getErrors()[0] ?></div>
+            <?php $app->clear_errors(); ?>
+            <?php endif ?>
+
             <div class="data-container container settings">
                 <form method="post" action="../src/logic/update.php" name="input-consts">
                     <div class="settings-box">
@@ -87,15 +91,35 @@ $consts = get_consts();
                     </form>
                 <?php endif ?>
 
-                <?php if ($app->check_state(AppStates::$default_values) or $app->check_state(AppStates::$input_values)): ?>
-					<?= new Button('submit', ['primary'], 'solve', 'data', 'Решить') ?>
-                <?php endif ?>
+<!--                --><?php //if ($app->check_state(AppStates::$default_values) or $app->check_state(AppStates::$input_values)): ?>
+                <?= new Button('submit', ['primary'], 'solve', 'data', 'Решить') ?>
+<!--                --><?php //endif ?>
             </div>
 
 			<?php if ($app->check_state(AppStates::$show_answer)): ?>
-				<div class="data-container container">
-					<div></div>
-				</div>
+                <div class="horizontal container matrix-box">
+                    <div class="data-container">
+                        <h2>Исходная матрица</h2>
+                    </div>
+                    <div class="horizontal matrix">
+                        <div class="matrix-head-row">
+                            <?php for ($i = 1; $i <= count($limits); $i++): ?>
+                                <div class="matrix-cell">
+                                    <span>x<sub><?= $i ?></sub></span>
+                                </div>
+                            <?php endfor ?>
+                            <div class="matrix-cell">b</div>
+                        </div>
+                        <?php foreach ($limits as $limit): ?>
+                            <div class="matrix-row">
+                                <?php foreach ($limit['values'] as $value): ?>
+                                    <div class="matrix-cell"><?= $value ?></div>
+                                <?php endforeach ?>
+                                <div class="matrix-cell"><?= $limit['b'] ?></div>
+                            </div>
+                        <?php endforeach ?>
+                    </div>
+                </div>
 			<?php endif ?>
         </div>
 

@@ -11,6 +11,7 @@ class App {
     private int $n;
     private int $m;
     public Data $data;
+    public array $errors;
 
     public function __construct() {
         $this->state = AppStates::$default_values;
@@ -18,6 +19,7 @@ class App {
         $this->n = $consts['min_variables'];
         $this->m = $consts['min_limits'];
         $this->data = new Data();
+        $this->errors = [];
     }
 
     public function getState(): int {
@@ -49,6 +51,22 @@ class App {
 
     public function setM(int $m): void {
         $this->m = $m;
+    }
+
+    public function getErrors(): array {
+        return $this->errors;
+    }
+
+    public function setErrors(array $errors): void {
+        $this->errors = $errors;
+    }
+
+    public function add_error(string $text): void {
+        $this->errors[] = $text;
+    }
+
+    public function clear_errors(): void {
+        $this->errors = [];
     }
 
     public function check_state(int $st): bool {

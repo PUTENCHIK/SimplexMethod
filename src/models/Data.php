@@ -29,31 +29,46 @@ class Data {
     }
 
     static public function as_rational(string $s): Rational {
-        if (preg_match('/^([0-9]+)$/ui', $s)) {
+        if (preg_match('/^(-)?([0-9]+)$/ui', $s)) {
             return new Rational((int)$s);
         }
-        elseif (preg_match('/^([0-9]+)\.([0-9]+)$/ui', $s)) {
+        elseif (preg_match('/^(-)?([0-9]+)\.([0-9]+)$/ui', $s)) {
             return new Rational(number: (float)$s);
         }
-        elseif (preg_match('/^([0-9]+),([0-9]+)$/ui', $s)) {
+        elseif (preg_match('/^(-)?([0-9]+),([0-9]+)$/ui', $s)) {
             $s = str_replace(',', '.', $s);
             return new Rational(number: (float)$s);
-        } elseif (preg_match('/^([0-9]+)\/([0-9]+)$/ui', $s)) {
+        } elseif (preg_match('/^(-)?([0-9]+)\/(-)?([0-9]+)$/ui', $s)) {
             $s = explode('/', $s);
             return new Rational((int)$s[0], (int)$s[1]);
         }
         else {
-            return new Rational();
+            throw new \Exception("Can't read rational");
         }
     }
 
-    public function read_post(array $post, int $n, int $m): void {
+    public function read_post(array $post, int $n, int $m): array {
+        $errors = [];
+
         if (isset($post['f'])) {
-            foreach ($post['f'] as $v) {
-                $this->function['values'][] = empty($v) ? new Rational() : self::as_rational($v);
+            foreach ($post['f'] as $index => $v) {
+                $true_index = $index+1;
+                if (!isset($v) or strlen($v) < 1) {
+                    $this->function['values'][] = '';
+                    $errors[] = "Не заполнен $true_index-й коэффициент целевой функции";
+//                    throw new \Exception("Не заполнен $true_index-й коэффициент целевой функции");
+                } else {
+                    try {
+                        $this->function['values'][] = self::as_rational($v);
+                    } catch (\Exception) {
+                        $this->function['values'][] = '';
+                        $errors[] = "Невалидный формат ввода $true_index-ого коэффициента целевой функции";
+                    }
+                }
             }
         } else {
-            throw new \Exception('No \'f\' in $_POST array');
+            $errors[] = 'Не передан ключ \'f\' в $POST-массиве';
+//            throw new \Exception('Не передан ключ \'f\' в $POST-массиве');
         }
 
         if (isset($post['type'])) {
@@ -66,10 +81,12 @@ class Data {
                     break;
                 default:
                     $type = $post['type'];
-                    throw new \Exception("Unknown goal function\'s type: $type");
+                    $errors[] = "Неизвестный тип целевой функции: $type";
+//                    throw new \Exception("Неизвестный тип целевой функции: $type");
             }
         } else {
-            throw new \Exception('No \'type\' in $_POST array');
+            $errors[] = 'Не передан ключ \'type\' в $POST-массиве';
+//            throw new \Exception('Не передан ключ \'type\' в $POST-массиве');
         }
 
         for ($i = 1; $i <= $m; $i++) {
@@ -80,11 +97,24 @@ class Data {
             $this->limits[] = [];
 
             if (isset($post[$key_row])) {
-                foreach ($post[$key_row] as $v) {
-                    $this->limits[$i-1]['values'][] = empty($v) ? new Rational() : self::as_rational($v);
+                foreach ($post[$key_row] as $index => $v) {
+                    $true_index = $index+1;
+                    if (!isset($v) or strlen($v) < 1) {
+                        $this->limits[$i-1]['values'][] = '';
+                        $errors[] = "Не заполнен $true_index-й коэффициент $i-ого ограничения";
+//                        throw new \Exception("Не заполнен $true_index-й коэффициент $i-ого ограничения");
+                    } else {
+                        try {
+                            $this->limits[$i-1]['values'][] = self::as_rational($v);
+                        } catch (\Exception) {
+                            $this->limits[$i-1]['values'][] = '';
+                            $errors[] = "Невалидный формат ввода $true_index-ого коэффициента $i-ого ограничения";
+                        }
+                    }
                 }
             } else {
-                throw new \Exception("No '$key_row' in \$_POST array");
+                $errors[] = "Не передан ключ \'$key_row\' в \$POST-массиве";
+//                throw new \Exception("Не передан ключ \'$key_row\' в \$POST-массиве");
             }
 
             if (isset($post[$key_sign])) {
@@ -100,18 +130,33 @@ class Data {
                         break;
                     default:
                         $sign = $post[$key_sign];
-                        throw new \Exception("Unknown $i'th sign: $sign");
+                        $errors[] = "Неизвестный знак $i-ого ограниченя: $sign";
+//                        throw new \Exception("Неизвестный знак $i-ого ограниченя: $sign");
                 }
             } else {
-                throw new \Exception("No '$key_sign' in \$_POST array");
+                $errors[] = "Не передан ключ \'$key_sign\' в \$POST-массиве";
+//                throw new \Exception("Не передан ключ \'$key_sign\' в \$POST-массиве");
             }
 
             if (isset($post[$key_b])) {
-                $this->limits[$i-1]['b'] = self::as_rational($post[$key_b]);
+                if (strlen($post[$key_b]) < 1) {
+                    $this->limits[$i-1]['b'] = '';
+                    $errors[] = "Не заполнен коэффициент b $i-ого ограничения";
+                } else {
+                    try {
+                        $this->limits[$i-1]['b'] = self::as_rational($post[$key_b]);
+                    } catch (\Exception) {
+                        $this->limits[$i-1]['b'] = '';
+                        $errors[] = "Невалидный формат ввода коэффициента b $i-ого ограничения";
+                    }
+                }
             } else {
-                throw new \Exception("No '$key_b' in \$_POST array");
+                $this->limits[$i-1]['b'] = '';
+                $errors[] = "Не передан ключ \'$key_b\' в \$POST-массиве";
+//                throw new \Exception("Не передан ключ \'$key_b\' в \$POST-массиве");
             }
         }
+        return $errors;
     }
 
     public function toArray(): array {

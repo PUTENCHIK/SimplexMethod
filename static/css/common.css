@@ -94,3 +94,8 @@ button.secondary:hover {
     border-radius: 20px;
     background-color: #ffffff;
 }
+
+.container.error {
+    background-color: red;
+    color: white;
+}

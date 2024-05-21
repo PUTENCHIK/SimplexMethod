@@ -21,16 +21,13 @@ if (! is_null($app)) {
             $app->data = new Data();
             $app->setState(AppStates::$default_values);
         } else if (isset($_POST['solve'])) {
-//            header('Content-Type: text/plain');
-//            print_r($_POST);
             $app->data = new Data();
-            try {
-                $app->data->read_post($_POST, $app->getN(), $app->getM());
-//                print_r($app->data->toArray());
-            } catch (\Exception $ex) {
-                echo $ex;
+            $app->setErrors($app->data->read_post($_POST, $app->getN(), $app->getM()));
+            if (empty($app->getErrors())) {
+                $app->setState(AppStates::$show_answer);
+            } else {
+                $app->setState(AppStates::$input_values);
             }
-            $app->setState(AppStates::$show_answer);
         }
         $_SESSION['app'] = $app;
     }
