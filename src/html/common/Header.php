@@ -15,7 +15,7 @@ class Header extends Element {
         return "
             <div class='header'>
                 <div class='header__content'>
-                    <img class='logo' src='../static/images/calculator.png' alt='logo'>
+                    <a href='main.php'><img class='logo' src='../static/images/calculator.png' alt='logo'></a>
                     <div class='site-title'>$this->page_name</div>
                     <div>О сайте</div>
                 </div>

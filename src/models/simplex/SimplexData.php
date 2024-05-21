@@ -1,23 +1,46 @@
 <?php
 
-namespace App;
+namespace App\Simplex;
 
-use mysql_xdevapi\Session;
+include_once "src/models/common/Data.php";
 
-include_once "src/models/FunctionTypes.php";
-include_once "src/models/LimitSigns.php";
-include_once "src/models/Rational.php";
+include_once "src/models/simplex/FunctionTypes.php";
+include_once "src/models/simplex/LimitSigns.php";
+include_once "src/models/common/Rational.php";
 
-class Data {
+include_once "src/config.php";
+
+class SimplexData extends \App\Data {
+    private int $n;
+    private int $m;
     private array $function;
     private array $limits;
 
-    public function __construct() {
+    public function __construct(?int $old_n = null, ?int $old_m = null) {
+        $consts = \App\get_simplex_consts();
+        $this->n = ! is_null($old_n) ? $old_n : $consts['min_variables'];
+        $this->m = ! is_null($old_m) ? $old_m : $consts['min_limits'];
         $this->function = [
             'values' => null,
             'type' => FunctionTypes::$max,
         ];
         $this->limits = [];
+    }
+
+    public function getN(): int {
+        return $this->n;
+    }
+
+    public function getM(): int {
+        return $this->m;
+    }
+
+    public function setN(int $n): void {
+        $this->n = $n;
+    }
+
+    public function setM(int $m): void {
+        $this->m = $m;
     }
 
     public function getFunction(): array {
@@ -26,25 +49,6 @@ class Data {
 
     public function getLimits(): array {
         return $this->limits;
-    }
-
-    static public function as_rational(string $s): Rational {
-        if (preg_match('/^(-)?([0-9]+)$/ui', $s)) {
-            return new Rational((int)$s);
-        }
-        elseif (preg_match('/^(-)?([0-9]+)\.([0-9]+)$/ui', $s)) {
-            return new Rational(number: (float)$s);
-        }
-        elseif (preg_match('/^(-)?([0-9]+),([0-9]+)$/ui', $s)) {
-            $s = str_replace(',', '.', $s);
-            return new Rational(number: (float)$s);
-        } elseif (preg_match('/^(-)?([0-9]+)\/(-)?([0-9]+)$/ui', $s)) {
-            $s = explode('/', $s);
-            return new Rational((int)$s[0], (int)$s[1]);
-        }
-        else {
-            throw new \Exception("Can't read rational");
-        }
     }
 
     public function read_post(array $post, int $n, int $m): array {

@@ -1,16 +1,17 @@
 <?php
 
-namespace App;
+namespace App\Simplex;
 
-include_once 'src/models/App.php';
-//include_once 'src/config.php';
+include_once 'src/models/common/App.php';
+include_once 'src/models/simplex/SimplexData.php';
+include_once 'src/models/simplex/SimplexMethod.php';
 
 if (! isset($_SESSION)) {
     session_start();
 }
 
-$app = $_SESSION['app'] ?? null;
-$consts = get_consts();
+$app = $_SESSION['simplex-app'] ?? null;
+$consts = \App\get_simplex_consts();
 
 if (! is_null($app)) {
     if (isset($_POST)) {
@@ -34,10 +35,10 @@ if (! is_null($app)) {
                 $app->setM($value);
             }
         }
-        $app->setState(AppStates::$input_values);
-        $_SESSION['app'] = $app;
+        $app->setState(\App\AppStates::$input_values);
+//        $_SESSION['app'] = $app;
     }
 }
 
-header('Location: ../../templates/simplex-method.php');
+header('Location: ../../../templates/simplex-method.php');
 exit;

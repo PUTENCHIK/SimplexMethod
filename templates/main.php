@@ -1,15 +1,19 @@
 <?php
-include "app/html/Header.php";
+
+namespace App;
+
+include "src/html/common/Header.php";
+
 ?>
 
 <html lang="ru">
     <head>
-        <title>Главная - SimplexMethod</title>
+        <title>Главная</title>
         <meta charset="UTF-8">
         <link href="../static/css/main-style.css" rel="stylesheet">
     </head>
     <body>
-        <?= new \app\html\Header("../static/images") ?>
+        <?= new Header("Главная страница") ?>
 
         <div class="main">
             <div class="instruments-container container horizontal">
@@ -17,8 +21,8 @@ include "app/html/Header.php";
                 <a href="simplex-method.php">
                     <div class="list-element">Симплекс метод</div>
                 </a>
-                <a href="#">
-                    <div class="list-element">Какой-то ещё метод</div>
+                <a href="snow-task.php">
+                    <div class="list-element">Задача об уборке снега</div>
                 </a>
             </div>
         </div>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Simplex;
 
 class FunctionTypes {
     static public int $max = 1;

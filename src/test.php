@@ -1,17 +1,15 @@
 <?php
 
-namespace App;
-
-include_once "src/models/Data.php";
+namespace App\Test;
 
 header('Content-Type: text/plain');
 
-$a = '';
+$arr = [1, 2, 3];
 
-if (isset($a) and strlen($a) > 0) {
-    echo "okay";
-    echo count_chars($a) > 0;
-}
-else {
-    echo "no";
-}
+$copy = $arr;
+
+
+$copy[0] = 10;
+
+print_r($copy);
+print_r($arr);

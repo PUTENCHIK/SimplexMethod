@@ -1,12 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Simplex;
 
-include_once 'Element.php';
-include_once 'InputRow.php';
-include_once 'src/models/FunctionTypes.php';
+include_once 'src/html/common/Element.php';
+include_once 'src/html/common/InputRow.php';
+include_once 'src/models/simplex/FunctionTypes.php';
 
-class GoalFunctionRow extends Element {
+class GoalFunctionRow extends \App\Element {
     public int $amount;
     public ?array $data;
 
@@ -16,7 +16,7 @@ class GoalFunctionRow extends Element {
     }
 
     public function render(): string {
-        $input_row = new InputRow($this->amount, "f", $this->data['values'] ?? null);
+        $input_row = new \App\InputRow($this->amount, "f", $this->data['values'] ?? null);
         $selected_max = (int)$this->data['type'] === FunctionTypes::$max ? ' selected' : '';
         $selected_min = (int)$this->data['type'] === FunctionTypes::$min ? ' selected' : '';
 

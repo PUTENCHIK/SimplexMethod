@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Simplex;
 
 class LimitSigns {
     static public int $more_eq = 1;
