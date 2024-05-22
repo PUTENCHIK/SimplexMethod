@@ -167,6 +167,93 @@ class Rational {
         }
     }
 
+    static private function __equal(Rational $first, Rational $second): bool {
+        return $first->num === $second->num and $first->den === $second->den;
+    }
+
+    static public function equal(mixed $first, mixed $second): bool {
+        if (gettype($first) === gettype($second) and gettype($first) !== 'object') {
+            return $first === $second;
+        }
+        elseif (gettype($first) === 'integer') {
+            return self::__equal(new Rational($first), $second);
+        }
+        elseif (gettype($second) === 'integer') {
+            return self::__equal($first, new Rational($second));
+        }
+        elseif (gettype($first) === 'double') {
+            return self::__equal(new Rational(number: $first), $second);
+        }
+        elseif (gettype($second) === 'double') {
+            return self::__equal($first, new Rational(number: $second));
+        }
+        else {
+            return self::__equal($first, $second);
+        }
+    }
+
+    static private function __less(Rational $first, Rational $second): bool {
+        return ($first->num / $first->den) < ($second->num / $second->den);
+    }
+
+    static public function less(mixed $first, mixed $second): bool {
+        if (gettype($first) === gettype($second) and gettype($first) !== 'object') {
+            return $first < $second;
+        }
+        elseif (gettype($first) === 'integer') {
+            return self::__less(new Rational($first), $second);
+        }
+        elseif (gettype($second) === 'integer') {
+            return self::__less($first, new Rational($second));
+        }
+        elseif (gettype($first) === 'double') {
+            return self::__less(new Rational(number: $first), $second);
+        }
+        elseif (gettype($second) === 'double') {
+            return self::__less($first, new Rational(number: $second));
+        }
+        else {
+            return self::__less($first, $second);
+        }
+    }
+
+    static private function __more(Rational $first, Rational $second): bool {
+        return ($first->num / $first->den) > ($second->num / $second->den);
+    }
+
+    static public function more(mixed $first, mixed $second): bool {
+        if (gettype($first) === gettype($second) and gettype($first) !== 'object') {
+            return $first < $second;
+        }
+        elseif (gettype($first) === 'integer') {
+            return self::__more(new Rational($first), $second);
+        }
+        elseif (gettype($second) === 'integer') {
+            return self::__more($first, new Rational($second));
+        }
+        elseif (gettype($first) === 'double') {
+            return self::__more(new Rational(number: $first), $second);
+        }
+        elseif (gettype($second) === 'double') {
+            return self::__more($first, new Rational(number: $second));
+        }
+        else {
+            return self::__more($first, $second);
+        }
+    }
+
+    static public function not_equal(mixed $first, mixed $second): bool {
+        return !self::equal($first, $second);
+    }
+
+    static public function less_equal(mixed $first, mixed $second): bool {
+        return !self::more($first, $second);
+    }
+
+    static public function more_equal(mixed $first, mixed $second): bool {
+        return !self::less($first, $second);
+    }
+
     public function __toString(): string {
         if ($this->den === 1) {
             return $this->num;

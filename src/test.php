@@ -2,14 +2,14 @@
 
 namespace App\Test;
 
+use App\Million;
+use App\Rational;
+
 header('Content-Type: text/plain');
 
-$arr = [1, 2, 3];
+include_once "src/models/common/Rational.php";
+include_once "src/models/common/Million.php";
+include_once "src/models/common/Data.php";
 
-$copy = $arr;
+$s = '12';
 
-
-$copy[0] = 10;
-
-print_r($copy);
-print_r($arr);

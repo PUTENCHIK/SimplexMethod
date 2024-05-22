@@ -50,6 +50,8 @@ $consts = \App\get_simplex_consts();
     <body>
         <?= new \App\Header("Симплекс метод") ?>
 
+		<?= new \App\Button('button', ['special', 'random-values'], text: "Случайные значения"); ?>
+
         <div class="main">
             <?php if (! empty($app->getErrors())): ?>
                 <div class="container horizontal error"><?= $app->getErrors()[0] ?></div>
@@ -121,8 +123,15 @@ $consts = \App\get_simplex_consts();
                         <h2>Исходная матрица</h2>
                     </div>
                     <div class="horizontal matrix">
+						<div class="matrix-head-row">
+                            <?php for ($i = 0; $i < $answer['n']; $i++): ?>
+								<div class="matrix-cell">
+									<span><?= $original['function']['values'][$i] ?></span>
+								</div>
+                            <?php endfor ?>
+						</div>
                         <div class="matrix-head-row">
-                            <?php for ($i = 1; $i <= count($original['function']['values']); $i++): ?>
+                            <?php for ($i = 1; $i <= $answer['n']; $i++): ?>
                                 <div class="matrix-cell">
                                     <span>x<sub><?= $i ?></sub></span>
                                 </div>
@@ -144,9 +153,21 @@ $consts = \App\get_simplex_consts();
 					<h2>Матрица с искусственным базисом</h2>
 					<div class="horizontal matrix">
 						<div class="matrix-head-row">
-                            <?php for ($i = 1; $i <= count($artificial['function']['values']); $i++): ?>
+                            <?php for ($i = 0; $i < $answer['n']+$answer['extra']; $i++): ?>
+								<div class="matrix-cell">
+									<span><?= $artificial['function']['values'][$i] ?></span>
+								</div>
+                            <?php endfor ?>
+						</div>
+						<div class="matrix-head-row">
+                            <?php for ($i = 1; $i <= $answer['n']; $i++): ?>
 								<div class="matrix-cell">
 									<span>x<sub><?= $i ?></sub></span>
+								</div>
+                            <?php endfor ?>
+                            <?php for ($i = 1; $i <= $answer['extra']; $i++): ?>
+								<div class="matrix-cell">
+									<span>u<sub><?= $i ?></sub></span>
 								</div>
                             <?php endfor ?>
 							<div class="matrix-cell">b</div>
@@ -162,13 +183,87 @@ $consts = \App\get_simplex_consts();
 					</div>
 				</div>
 
-				<?php
-//				header('Content-Type: text/plain');
-				print_r($artificial);
-				?>
+				<?php foreach ($answer['iterations'] as $it_index => $iteration): ?>
+
+					<?php
+
+                    $basis_values = $iteration->get_basis_values();
+                    $iteration = $iteration->toArray();
+
+					?>
+
+					<div class="horizontal container matrix-box">
+						<h2>Итерация <?= $it_index+1 ?></h2>
+
+						<div class="horizontal matrix">
+<!--					Значения функции ================================================-->
+							<div class="matrix-head-row">
+								<div class="matrix-cell"></div>
+								<div class="matrix-cell"></div>
+								<?php foreach ($iteration['function'] as $value): ?>
+									<div class="matrix-cell"><?= $value ?></div>
+								<?php endforeach ?>
+								<div class="matrix-cell"></div>
+							</div>
+
+<!--					Обозначения переменных ================================================-->
+							<div class="matrix-head-row">
+								<div class="matrix-cell"></div>
+								<div class="matrix-cell"></div>
+                                <?php for ($i = 1; $i <= $answer['n']; $i++): ?>
+									<div class="matrix-cell">
+										<span>x<sub><?= $i ?></sub></span>
+									</div>
+                                <?php endfor ?>
+                                <?php for ($i = 1; $i <= $answer['extra']; $i++): ?>
+									<div class="matrix-cell">
+										<span>u<sub><?= $i ?></sub></span>
+									</div>
+                                <?php endfor ?>
+								<div class="matrix-cell">b</div>
+								<div class="matrix-cell">Q</div>
+							</div>
+
+							<?php for ($row_index = 0; $row_index < $answer['m']; $row_index++): ?>
+								<div class="matrix-row">
+									<div class="matrix-cell"><?= $basis_values[$row_index] ?></div>
+									<div class="matrix-cell">
+										<?= $app->answer->get_var_name($iteration['basis'][$row_index]) ?>
+									</div>
+
+									<?php foreach ($iteration['matrix'][$row_index] as $matrix_value): ?>
+										<div class="matrix-cell"><?= $matrix_value ?></div>
+									<?php endforeach ?>
+									<div class="matrix-cell"><?= $iteration['b'][$row_index] ?></div>
+									<div class="matrix-cell <?= $row_index === $iteration['chosen_row'] ? 'chosen' : '' ?>">
+										<?= ! is_null($iteration['rating'][$row_index]) ? $iteration['rating'][$row_index] : '-' ?>
+									</div>
+								</div>
+							<?php endfor ?>
+
+<!--					Оценки  ================================================-->
+							<div class="matrix-row">
+								<div class="matrix-cell"></div>
+								<div class="matrix-cell">Δ</div>
+								<?php foreach ($iteration['deltas'] as $delta_index => $delta): ?>
+									<div class="matrix-cell <?= $delta_index === $iteration['chosen_column'] ? 'chosen' : '' ?>"><?= $delta ?></div>
+								<?php endforeach ?>
+							</div>
+						</div>
+					</div>
+
+                    <?php
+//					header('Content-Type: text/plain');
+                    print_r($iteration);
+                    ?>
+
+				<?php endforeach ?>
+
+
 			<?php endif ?>
         </div>
 
         <script src="../static/js/simplex_input_listener.js"></script>
+		<script src="../static/js/random_values.js"></script>
     </body>
 </html>

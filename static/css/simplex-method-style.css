@@ -139,3 +139,14 @@ input[type="text"].coefficient {
 .matrix-cell {
     display: table-cell;
 }
+
+.matrix-cell.chosen {
+    background-color: #bdf5ff;
+}
+
+.random-values {
+    height: 100px;
+    position: fixed;
+    left: 20px;
+    top: calc(50% - 50px);
+}

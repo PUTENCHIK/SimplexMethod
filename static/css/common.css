@@ -77,6 +77,14 @@ button.secondary:hover {
     background-color: #e3e3e3;
 }
 
+button.special {
+    background-color: #d7d7d7;
+}
+
+button.special:hover {
+    background-color: #c1c1c1;
+}
+
 .horizontal {
     margin-left: auto;
     margin-right: auto;
