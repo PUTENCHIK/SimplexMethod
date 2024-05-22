@@ -2,17 +2,17 @@
 
 namespace App\Simplex;
 
-include_once "src/html/common/Header.php";
-include_once "src/html/common/Button.php";
-include_once "src/html/simplex/GoalFunctionRow.php";
-include_once "src/html/simplex/LimitRow.php";
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/html/common/Header.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/html/common/Button.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/html/simplex/GoalFunctionRow.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/html/simplex/LimitRow.php';
 
-include_once "src/models/common/AppStates.php";
-include_once "src/models/common/App.php";
-include_once "src/models/simplex/SimplexData.php";
-include_once "src/models/simplex/SimplexMethod.php";
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/models/common/AppStates.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/models/common/App.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/models/simplex/SimplexData.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/models/simplex/SimplexMethod.php';
 
-include_once "src/config.php";
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/config.php';
 
 if (! isset($_SESSION)) {
     session_start();

@@ -2,7 +2,7 @@
 
 namespace App;
 
-include "src/html/common/Header.php";
+include $_SERVER['DOCUMENT_ROOT'].'/src/html/common/Header.php';
 
 ?>
 

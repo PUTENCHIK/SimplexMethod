@@ -2,7 +2,7 @@
 
 namespace App\Snow;
 
-include_once "src/html/common/Header.php";
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/html/common/Header.php';
 
 ?>
 
@@ -16,7 +16,7 @@ include_once "src/html/common/Header.php";
         <?= new \App\Header("Задача об уборке снега") ?>
 
 		<div class="main">
-
+			В разработке
 		</div>
     </body>
 </html>
