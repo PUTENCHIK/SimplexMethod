@@ -2,11 +2,11 @@
 
 namespace App;
 
-include_once "AppStates.php";
-include_once "Data.php";
-include_once "Answer.php";
+include_once 'AppStates.php';
+include_once 'Data.php';
+include_once 'Answer.php';
 
-include_once "src/config.php";
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/config.php';
 
 class App {
     private int $state;

@@ -5,12 +5,12 @@ namespace App\Simplex;
 use App\Million;
 use App\Rational;
 
-include_once 'src/models/common/Rational.php';
-include_once 'src/models/common/Million.php';
-include_once 'src/models/common/Answer.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/models/common/Rational.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/models/common/Million.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/models/common/Answer.php';
 
 include_once 'LimitSigns.php';
-include_once "FunctionTypes.php";
+include_once 'FunctionTypes.php';
 include_once 'SimplexIteration.php';
 
 class SimplexMethod extends \App\Answer {

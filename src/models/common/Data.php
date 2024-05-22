@@ -2,7 +2,7 @@
 
 namespace App;
 
-include_once "Rational.php";
+include_once 'Rational.php';
 
 abstract class Data {
     abstract public function __construct();

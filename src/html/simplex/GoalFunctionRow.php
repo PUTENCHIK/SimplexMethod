@@ -2,9 +2,9 @@
 
 namespace App\Simplex;
 
-include_once 'src/html/common/Element.php';
-include_once 'src/html/common/InputRow.php';
-include_once 'src/models/simplex/FunctionTypes.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/html/common/Element.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/html/common/InputRow.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/models/simplex/FunctionTypes.php';
 
 class GoalFunctionRow extends \App\Element {
     public int $amount;

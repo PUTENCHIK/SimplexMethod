@@ -2,7 +2,7 @@
 
 namespace App;
 
-include_once "Rational.php";
+include_once 'Rational.php';
 
 class Million {
     public Rational $k;

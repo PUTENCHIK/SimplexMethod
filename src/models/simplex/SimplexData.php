@@ -2,13 +2,13 @@
 
 namespace App\Simplex;
 
-include_once "src/models/common/Data.php";
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/models/common/Data.php';
 
-include_once "src/models/simplex/FunctionTypes.php";
-include_once "src/models/simplex/LimitSigns.php";
-include_once "src/models/common/Rational.php";
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/models/simplex/FunctionTypes.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/models/simplex/LimitSigns.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/models/common/Rational.php';
 
-include_once "src/config.php";
+include_once $_SERVER['DOCUMENT_ROOT'].'/src/config.php';
 
 class SimplexData extends \App\Data {
     private int $n;
