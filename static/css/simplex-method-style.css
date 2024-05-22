@@ -108,7 +108,6 @@ input[type="text"].coefficient {
 .limits-box > div > input:last-child {
     display: block;
     margin-left: 10px;
-
 }
 
 .matrix-box > :not(:last-child) {
@@ -160,4 +159,16 @@ input[type="text"].coefficient {
 
 .answer-box > div:not(:last-child) {
     margin-bottom: 20px;
+}
+
+@media only screen and (max-width: 1280px) {
+    .settings-box {
+        display: block;
+        overflow-y: hidden;
+        overflow-x: auto;
+    }
+
+    .data-container {
+        overflow-x: hidden;
+    }
 }

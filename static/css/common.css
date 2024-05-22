@@ -121,3 +121,27 @@ button.special:hover {
 .data-container > div:not(:last-child) {
     margin-bottom: 20px;
 }
+
+@media only screen and (max-width: 1280px) {
+    .main {
+        width: calc(100% - 40px);
+        margin: 20px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    body {
+        font-size: 16pt;
+    }
+
+    h1 {
+        font-size: 18pt;
+    }
+    h2 {
+        font-size: 17pt;
+    }
+
+    .main {
+        width: calc(100% - 40px);
+    }
+}

@@ -17,7 +17,7 @@ class Header extends Element {
                 <div class='header__content'>
                     <a href='main.php'><img class='logo' src='../static/images/calculator.png' alt='logo'></a>
                     <div class='site-title'>$this->page_name</div>
-                    <div>О сайте</div>
+                    <div><a href='https://github.com/PUTENCHIK/SimplexMethod/tree/master'>О сайте</a></div>
                 </div>
             </div>
         ";
