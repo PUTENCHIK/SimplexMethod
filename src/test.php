@@ -11,5 +11,8 @@ include_once "src/models/common/Rational.php";
 include_once "src/models/common/Million.php";
 include_once "src/models/common/Data.php";
 
-$s = '12';
+$r1 = new Rational(-3, 4);
+$r2 = new Rational(2, 11);
+
+echo (string)Rational::less($r1, $r2);
 

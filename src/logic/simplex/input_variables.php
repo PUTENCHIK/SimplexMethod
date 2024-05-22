@@ -27,10 +27,6 @@ if (! is_null($app)) {
             $app->setErrors($app->data->read_post($_POST, $app->getN(), $app->getM()));
             if (empty($app->getErrors())) {
                 $app->setState(\App\AppStates::$show_answer);
-//                header('Content-Type: text/plain');
-//                print_r($app->data->toArray());
-
-//                $app->setAnswer(new SimplexMethod($app->data->toArray()));
                 try {
                     $app->setAnswer(new SimplexMethod($app->data->toArray()));
                 } catch (\Exception $ex) {

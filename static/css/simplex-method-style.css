@@ -150,3 +150,14 @@ input[type="text"].coefficient {
     left: 20px;
     top: calc(50% - 50px);
 }
+
+.answer-box {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.answer-box > div:not(:last-child) {
+    margin-bottom: 20px;
+}

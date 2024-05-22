@@ -3,6 +3,7 @@
 namespace App\Simplex;
 
 use App\Million;
+use App\Rational;
 
 include_once 'src/models/common/Rational.php';
 include_once 'src/models/common/Million.php';
@@ -160,12 +161,47 @@ class SimplexMethod extends \App\Answer {
         $iterations = [];
 
         $iterations[] = new SimplexIteration($this->artificial);
+        $iterations[] = new SimplexIteration(previous: $iterations[0]);
+
+        while (! end($iterations)->check_optimality()) {
+            if (! end($iterations)->can_continue()) {
+                break;
+            }
+            $iterations[] = new SimplexIteration(previous: end($iterations));
+        }
 
 //        header('Content-Type: text/plain');
 //        print_r($iterations[0]);
 //        exit;
 
         return $iterations;
+    }
+
+    public function get_answer(): array {
+        $last = end($this->iterations);
+        $f = new Rational();
+        $vars = [];
+        for ($v = 0; $v < count($last->function); $v++) {
+            $vars[] = new Rational();
+        }
+        foreach ($last->b as $index => $value) {
+            $v_index = $last->basis[$index];
+            if ($v_index < count($last->function)) {
+                $vars[$v_index] = $value;
+            }
+        }
+
+        foreach ($vars as $index => $var) {
+            if ($index < count($last->function) - $this->extra) {
+                $f_value = $last->function[$index]->b;
+                $f = Rational::add($f, Rational::multiply($var, $f_value));
+            }
+        }
+
+        return [
+            'f' => $f,
+            'vars' => $vars,
+        ];
     }
 
     public function toArray(): array {

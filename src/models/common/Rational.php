@@ -142,11 +142,13 @@ class Rational {
     }
 
     static public function divide(mixed $first, mixed $second): ?Rational {
+        $s = clone $second;
+
         if (gettype($first) === gettype($second) and gettype($first) !== 'object') {
             return null;
         }
         else if (gettype($first) === 'integer') {
-            return self::multiply(new Rational($first), $second->invert());
+            return self::multiply(new Rational($first), $s->invert());
         }
         else if (gettype($second) === 'integer') {
             $new = new Rational($second);
@@ -154,7 +156,7 @@ class Rational {
             return self::multiply($first, $new);
         }
         else if (gettype($first) === 'double') {
-            return self::multiply(new Rational(number: $first), $second->invert());
+            return self::multiply(new Rational(number: $first), $s->invert());
         }
         else if (gettype($second) === 'double') {
             $new = new Rational(number: $second);
@@ -162,8 +164,8 @@ class Rational {
             return self::multiply($first, $new);
         }
         else {
-            $second->invert();
-            return Rational::__multiply($first, $second);
+            $s->invert();
+            return Rational::__multiply($first, $s);
         }
     }
 

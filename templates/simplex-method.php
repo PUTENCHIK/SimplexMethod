@@ -24,16 +24,8 @@ if (! isset($_SESSION['simplex-app'])) {
     $app = $_SESSION['simplex-app'];
 }
 
-//$app = new \App\App(new SimplexData());
-//$_SESSION['simplex-app'] = $app;
-
 $function = ! empty($app->data->getFunction()) ? $app->data->getFunction() : null;
 $limits = ! empty($app->data->getLimits()) ? $app->data->getLimits() : null;
-
-//header('Content-Type: text/plain');
-//if (! is_null($app->answer))  {
-//	print_r($app->answer->toArray());
-//}
 
 $app->update_state();
 
@@ -118,148 +110,161 @@ $consts = \App\get_simplex_consts();
 
 				?>
 
-                <div class="horizontal container matrix-box">
-                    <div class="data-container">
-                        <h2>Исходная матрица</h2>
-                    </div>
-                    <div class="horizontal matrix">
-						<div class="matrix-head-row">
-                            <?php for ($i = 0; $i < $answer['n']; $i++): ?>
-								<div class="matrix-cell">
-									<span><?= $original['function']['values'][$i] ?></span>
-								</div>
-                            <?php endfor ?>
-						</div>
-                        <div class="matrix-head-row">
-                            <?php for ($i = 1; $i <= $answer['n']; $i++): ?>
-                                <div class="matrix-cell">
-                                    <span>x<sub><?= $i ?></sub></span>
-                                </div>
-                            <?php endfor ?>
-                            <div class="matrix-cell">b</div>
-                        </div>
-                        <?php foreach ($original_limits as $limit): ?>
-                            <div class="matrix-row">
-                                <?php foreach ($limit['values'] as $value): ?>
-                                    <div class="matrix-cell"><?= $value ?></div>
-                                <?php endforeach ?>
-                                <div class="matrix-cell"><?= $limit['b'] ?></div>
-                            </div>
-                        <?php endforeach ?>
-                    </div>
-                </div>
-
-				<div class="horizontal container matrix-box">
-					<h2>Матрица с искусственным базисом</h2>
-					<div class="horizontal matrix">
-						<div class="matrix-head-row">
-                            <?php for ($i = 0; $i < $answer['n']+$answer['extra']; $i++): ?>
-								<div class="matrix-cell">
-									<span><?= $artificial['function']['values'][$i] ?></span>
-								</div>
-                            <?php endfor ?>
-						</div>
-						<div class="matrix-head-row">
-                            <?php for ($i = 1; $i <= $answer['n']; $i++): ?>
-								<div class="matrix-cell">
-									<span>x<sub><?= $i ?></sub></span>
-								</div>
-                            <?php endfor ?>
-                            <?php for ($i = 1; $i <= $answer['extra']; $i++): ?>
-								<div class="matrix-cell">
-									<span>u<sub><?= $i ?></sub></span>
-								</div>
-                            <?php endfor ?>
-							<div class="matrix-cell">b</div>
-						</div>
-                        <?php foreach ($artificial_limits as $limit): ?>
-							<div class="matrix-row">
-                                <?php foreach ($limit['values'] as $value): ?>
-									<div class="matrix-cell"><?= $value ?></div>
-                                <?php endforeach ?>
-								<div class="matrix-cell"><?= $limit['b'] ?></div>
-							</div>
-                        <?php endforeach ?>
-					</div>
-				</div>
-
-				<?php foreach ($answer['iterations'] as $it_index => $iteration): ?>
-
-					<?php
-
-                    $basis_values = $iteration->get_basis_values();
-                    $iteration = $iteration->toArray();
-
-					?>
+				<div class="horizontal answer-box">
 
 					<div class="horizontal container matrix-box">
-						<h2>Итерация <?= $it_index+1 ?></h2>
-
+						<div class="data-container">
+							<h2>Исходная матрица</h2>
+						</div>
 						<div class="horizontal matrix">
-<!--					Значения функции ================================================-->
 							<div class="matrix-head-row">
-								<div class="matrix-cell"></div>
-								<div class="matrix-cell"></div>
-								<?php foreach ($iteration['function'] as $value): ?>
-									<div class="matrix-cell"><?= $value ?></div>
-								<?php endforeach ?>
-								<div class="matrix-cell"></div>
+								<?php for ($i = 0; $i < $answer['n']; $i++): ?>
+									<div class="matrix-cell">
+										<span><?= $original['function']['values'][$i] ?></span>
+									</div>
+								<?php endfor ?>
 							</div>
-
-<!--					Обозначения переменных ================================================-->
 							<div class="matrix-head-row">
-								<div class="matrix-cell"></div>
-								<div class="matrix-cell"></div>
-                                <?php for ($i = 1; $i <= $answer['n']; $i++): ?>
+								<?php for ($i = 1; $i <= $answer['n']; $i++): ?>
 									<div class="matrix-cell">
 										<span>x<sub><?= $i ?></sub></span>
 									</div>
-                                <?php endfor ?>
-                                <?php for ($i = 1; $i <= $answer['extra']; $i++): ?>
-									<div class="matrix-cell">
-										<span>u<sub><?= $i ?></sub></span>
-									</div>
-                                <?php endfor ?>
+								<?php endfor ?>
 								<div class="matrix-cell">b</div>
-								<div class="matrix-cell">Q</div>
 							</div>
-
-							<?php for ($row_index = 0; $row_index < $answer['m']; $row_index++): ?>
+							<?php foreach ($original_limits as $limit): ?>
 								<div class="matrix-row">
-									<div class="matrix-cell"><?= $basis_values[$row_index] ?></div>
-									<div class="matrix-cell">
-										<?= $app->answer->get_var_name($iteration['basis'][$row_index]) ?>
-									</div>
-
-									<?php foreach ($iteration['matrix'][$row_index] as $matrix_value): ?>
-										<div class="matrix-cell"><?= $matrix_value ?></div>
+									<?php foreach ($limit['values'] as $value): ?>
+										<div class="matrix-cell"><?= $value ?></div>
 									<?php endforeach ?>
-									<div class="matrix-cell"><?= $iteration['b'][$row_index] ?></div>
-									<div class="matrix-cell <?= $row_index === $iteration['chosen_row'] ? 'chosen' : '' ?>">
-										<?= ! is_null($iteration['rating'][$row_index]) ? $iteration['rating'][$row_index] : '-' ?>
-									</div>
+									<div class="matrix-cell"><?= $limit['b'] ?></div>
 								</div>
-							<?php endfor ?>
-
-<!--					Оценки  ================================================-->
-							<div class="matrix-row">
-								<div class="matrix-cell"></div>
-								<div class="matrix-cell">Δ</div>
-								<?php foreach ($iteration['deltas'] as $delta_index => $delta): ?>
-									<div class="matrix-cell <?= $delta_index === $iteration['chosen_column'] ? 'chosen' : '' ?>"><?= $delta ?></div>
-								<?php endforeach ?>
-							</div>
+							<?php endforeach ?>
 						</div>
 					</div>
 
-                    <?php
-//					header('Content-Type: text/plain');
-                    print_r($iteration);
-                    ?>
+					<div class="horizontal container matrix-box">
+						<h2>Матрица с искусственным базисом</h2>
+						<div class="horizontal matrix">
+							<div class="matrix-head-row">
+								<?php for ($i = 0; $i < $answer['n']+$answer['extra']; $i++): ?>
+									<div class="matrix-cell">
+										<span><?= $artificial['function']['values'][$i] ?></span>
+									</div>
+								<?php endfor ?>
+							</div>
+							<div class="matrix-head-row">
+								<?php for ($i = 1; $i <= $answer['n']; $i++): ?>
+									<div class="matrix-cell">
+										<span>x<sub><?= $i ?></sub></span>
+									</div>
+								<?php endfor ?>
+								<?php for ($i = 1; $i <= $answer['extra']; $i++): ?>
+									<div class="matrix-cell">
+										<span>u<sub><?= $i ?></sub></span>
+									</div>
+								<?php endfor ?>
+								<div class="matrix-cell">b</div>
+							</div>
+							<?php foreach ($artificial_limits as $limit): ?>
+								<div class="matrix-row">
+									<?php foreach ($limit['values'] as $value): ?>
+										<div class="matrix-cell"><?= $value ?></div>
+									<?php endforeach ?>
+									<div class="matrix-cell"><?= $limit['b'] ?></div>
+								</div>
+							<?php endforeach ?>
+						</div>
+					</div>
 
-				<?php endforeach ?>
+					<?php foreach ($answer['iterations'] as $it_index => $iteration): ?>
 
+						<?php
 
+						$basis_values = $iteration->get_basis_values();
+						$iteration = $iteration->toArray();
+
+						?>
+
+						<div class="horizontal container matrix-box">
+							<h2>Итерация <?= $it_index+1 ?></h2>
+
+							<div class="horizontal matrix">
+	<!--					Значения функции ================================================-->
+								<div class="matrix-head-row">
+									<div class="matrix-cell"></div>
+									<div class="matrix-cell"></div>
+									<?php foreach ($iteration['function'] as $value): ?>
+										<div class="matrix-cell"><?= $value ?></div>
+									<?php endforeach ?>
+									<div class="matrix-cell"></div>
+								</div>
+
+	<!--					Обозначения переменных ================================================-->
+								<div class="matrix-head-row">
+									<div class="matrix-cell"></div>
+									<div class="matrix-cell"></div>
+									<?php for ($i = 1; $i <= $answer['n']; $i++): ?>
+										<div class="matrix-cell">
+											<span>x<sub><?= $i ?></sub></span>
+										</div>
+									<?php endfor ?>
+									<?php for ($i = 1; $i <= $answer['extra']; $i++): ?>
+										<div class="matrix-cell">
+											<span>u<sub><?= $i ?></sub></span>
+										</div>
+									<?php endfor ?>
+									<div class="matrix-cell">b</div>
+									<div class="matrix-cell">Q</div>
+								</div>
+
+								<?php for ($row_index = 0; $row_index < $answer['m']; $row_index++): ?>
+									<div class="matrix-row">
+										<div class="matrix-cell"><?= $basis_values[$row_index] ?></div>
+										<div class="matrix-cell">
+											<?= $app->answer->get_var_name($iteration['basis'][$row_index]) ?>
+										</div>
+
+										<?php foreach ($iteration['matrix'][$row_index] as $matrix_value): ?>
+											<div class="matrix-cell"><?= $matrix_value ?></div>
+										<?php endforeach ?>
+										<div class="matrix-cell"><?= $iteration['b'][$row_index] ?></div>
+										<div class="matrix-cell <?= $row_index === $iteration['chosen_row'] ? 'chosen' : '' ?>">
+											<?= ! is_null($iteration['rating'][$row_index]) ? $iteration['rating'][$row_index] : '-' ?>
+										</div>
+									</div>
+								<?php endfor ?>
+
+	<!--					Оценки  ================================================-->
+								<div class="matrix-row">
+									<div class="matrix-cell"></div>
+									<div class="matrix-cell">Δ</div>
+									<?php foreach ($iteration['deltas'] as $delta_index => $delta): ?>
+										<div class="matrix-cell <?= $delta_index === $iteration['chosen_column'] ? 'chosen' : '' ?>"><?= $delta ?></div>
+									<?php endforeach ?>
+								</div>
+							</div>
+						</div>
+
+					<?php endforeach ?>
+
+					<?php if (empty($app->errors)): ?>
+                        <?php
+                        $answer = $app->answer->get_answer();
+                        ?>
+						<div class="horizontal container answer-block">
+							<h2>Ответ</h2>
+							<div>f(x)=<?= $answer['f'] ?></div>
+							<div>[<?= implode(', ', $answer['vars']) ?>]</div>
+						</div>
+					<?php else: ?>
+						<div class="horizontal container answer-block">
+							<h2>Ответ</h2>
+							<div>Функция не ограничена, задача не имеет ответа</div>
+						</div>
+					<?php endif ?>
+
+				</div>
 			<?php endif ?>
         </div>
 

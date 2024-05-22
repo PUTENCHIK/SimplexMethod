@@ -159,6 +159,26 @@ class SimplexData extends \App\Data {
                 $errors[] = "Не передан ключ \'$key_b\' в \$POST-массиве";
 //                throw new \Exception("Не передан ключ \'$key_b\' в \$POST-массиве");
             }
+
+            foreach ($this->limits as $index => $limit) {
+                if (empty($limit['b'])) {
+                    continue;
+                }
+                if (\App\Rational::less($limit['b'], 0)) {
+                    $this->limits[$index]['b'] = \App\Rational::multiply($limit['b'], -1);
+                    foreach ($limit['values'] as $v => $value) {
+                        $this->limits[$index]['values'][$v] = \App\Rational::multiply($value, -1);
+                    }
+                    switch ($limit['sign']) {
+                        case LimitSigns::$less_eq:
+                            $this->limits[$index]['sign'] = LimitSigns::$more_eq;
+                            break;
+                        case LimitSigns::$more_eq:
+                            $this->limits[$index]['sign'] = LimitSigns::$less_eq;
+                            break;
+                    }
+                }
+            }
         }
         return $errors;
     }

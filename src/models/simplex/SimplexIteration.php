@@ -17,18 +17,37 @@ class SimplexIteration {
     public array $b;
     public array $basis;                // индексы переменных базиса (начиная с нуля)
     public array $deltas;               // оценки класса Million
-    public int $chosen_column;          // индекс колонки с мин/макс оценкой (начиная с нуля)
-    public array $rating;               // столбец с оценками замены строки
-    public int $chosen_row;             // индекс строки с мин/макс оценкой (начиная с нуля)
+    public ?int $chosen_column;         // индекс колонки с мин/макс оценкой (начиная с нуля)
+    public ?array $rating;              // столбец с оценками замены строки
+    public ?int $chosen_row;            // индекс строки с мин/макс оценкой (начиная с нуля)
 
-    public function __construct(array $data) {
-        $this->function = self::extract_function($data['function']);
-        $this->type = self::extract_type($data['function']);
-        $this->matrix = self::extract_matrix($data['limits']);
-        $this->b = self::extract_b($data['limits']);
+    public function __construct(array $data = null, SimplexIteration $previous = null) {
+        if (! is_null($data)) {
+            $this->function = self::extract_function($data['function']);
+            $this->type = self::extract_type($data['function']);
+            $this->matrix = self::extract_matrix($data['limits']);
+            $this->b = self::extract_b($data['limits']);
 
-        $this->detect_basis();
+            $this->detect_basis();
+
+        } else {
+            $this->function = $previous->function;
+            $this->type = $previous->type;
+            $this->matrix = $previous->matrix;
+            $this->b = $previous->b;
+            $this->basis = $previous->basis;
+
+            $this->update_matrix($previous->chosen_column, $previous->chosen_row);
+        }
+
         $this->count_deltas();
+        if ($this->check_optimality()) {
+            $this->chosen_column = null;
+            $this->rating = null;
+            $this->chosen_row = null;
+            return;
+        }
+
         $this->choose_column();
         $this->count_rating();
         $this->choose_row();
@@ -117,12 +136,12 @@ class SimplexIteration {
         }
     }
 
-    public function find_needle(array $arr): array {
+    public function choose_column(): void {
         $chosen = [
             'index' => 0,
-            'value' => $arr[0],
+            'value' => $this->deltas[0],
         ];
-        foreach ($arr as $index => $value) {
+        foreach ($this->deltas as $index => $value) {
             switch ($this->type) {
                 case FunctionTypes::$max:
                     if (Million::less($value, $chosen['value'])) {
@@ -138,11 +157,7 @@ class SimplexIteration {
                     break;
             }
         }
-        return $chosen;
-    }
-
-    public function choose_column(): void {
-        $this->chosen_column = $this->find_needle($this->deltas)['index'];
+        $this->chosen_column = $chosen['index'];
     }
 
     public function count_rating(): void {
@@ -159,27 +174,102 @@ class SimplexIteration {
     }
 
     public function choose_row(): void {
-        $chosen = [
-            'index' => 0,
-            'value' => $this->rating[0],
-        ];
+        $chosen = null;
         foreach ($this->rating as $index => $value) {
+            if (! is_null($value)) {
+                $chosen = [
+                    'index' => $index,
+                    'value' => $value,
+                ];
+            }
+        }
+
+        if (is_null($chosen)) {
+            throw new \Exception('All Q rates are equal 0');
+        }
+
+        foreach ($this->rating as $index => $value) {
+            if (is_null($value)) {
+                continue;
+            }
+            if (Rational::less($value, $chosen['value'])) {
+                $chosen['index'] = $index;
+                $chosen['value'] = $value;
+            };
+
+//            switch ($this->type) {
+//                case FunctionTypes::$max:
+//                    if (Rational::less($value, $chosen['value'])) {
+//                        $chosen['index'] = $index;
+//                        $chosen['value'] = $value;
+//                    };
+//                    break;
+//                case FunctionTypes::$min:
+//                    if (Rational::more($value, $chosen['value'])) {
+//                        $chosen['index'] = $index;
+//                        $chosen['value'] = $value;
+//                    };
+//                    break;
+//            }
+        }
+        $this->chosen_row = $chosen['index'];
+    }
+
+    public function check_optimality(): bool {
+        foreach ($this->deltas as $delta) {
             switch ($this->type) {
                 case FunctionTypes::$max:
-                    if (Rational::less($value, $chosen['value'])) {
-                        $chosen['index'] = $index;
-                        $chosen['value'] = $value;
-                    };
+                    if (Million::less($delta, 0)) {
+                        return false;
+                    }
                     break;
                 case FunctionTypes::$min:
-                    if (Rational::more($value, $chosen['value'])) {
-                        $chosen['index'] = $index;
-                        $chosen['value'] = $value;
-                    };
+                    if (Million::more($delta, 0)) {
+                        return false;
+                    }
                     break;
             }
         }
-        $this->chosen_row = $chosen['index'];
+        return true;
+    }
+
+    public function can_continue(): bool {
+        foreach ($this->rating as $rate) {
+            if (! is_null($rate)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Делит выбранный ряд на ячейку в пересечении, приводит к нулям ячейки в выбранном столбце, меняет массив b
+     * @param int $chosen_column
+     * @param int $chosen_row
+     */
+    public function update_matrix(int $chosen_column, int $chosen_row): void {
+        header('Content-Type: text/plain');
+        $chosen_value = clone $this->matrix[$chosen_row][$chosen_column];
+
+        for ($v = 0; $v < count($this->function); $v++) {
+            $this->matrix[$chosen_row][$v] = Rational::divide($this->matrix[$chosen_row][$v], $chosen_value);
+        }
+        $this->b[$chosen_row] = Rational::divide($this->b[$chosen_row], $chosen_value);
+
+        for ($row = 0; $row < count($this->matrix); $row++) {
+            if ($row !== $chosen_row and Rational::not_equal($this->matrix[$row][$chosen_column], 0)) {
+                $factor = $this->matrix[$row][$chosen_column];
+                echo 'factor: ' . $factor . "\n";
+                foreach ($this->matrix[$row] as $index => $value) {
+                    $minus = Rational::multiply($this->matrix[$chosen_row][$index], $factor);
+                    $this->matrix[$row][$index] = Rational::subtract($value, $minus);
+                }
+                $this->b[$row] = Rational::subtract($this->b[$row], Rational::multiply($this->b[$chosen_row], $factor));
+            }
+        }
+        $this->basis[$chosen_row] = $chosen_column;
+
+//        exit;
     }
 
     public function toArray(): array {
