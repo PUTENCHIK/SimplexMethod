@@ -37,6 +37,10 @@ class SimplexIteration {
             $this->b = $previous->b;
             $this->basis = $previous->basis;
 
+            if (is_null($previous->chosen_column) or is_null($previous->chosen_row)) {
+                throw new \Exception('Нет решений');
+            }
+
             $this->update_matrix($previous->chosen_column, $previous->chosen_row);
         }
 
@@ -45,12 +49,11 @@ class SimplexIteration {
             $this->chosen_column = null;
             $this->rating = null;
             $this->chosen_row = null;
-            return;
+        } else {
+            $this->choose_column();
+            $this->count_rating();
+            $this->choose_row();
         }
-
-        $this->choose_column();
-        $this->count_rating();
-        $this->choose_row();
     }
 
     /**

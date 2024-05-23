@@ -137,6 +137,7 @@ input[type="text"].coefficient {
 
 .matrix-cell {
     display: table-cell;
+    outline: 1px solid black;
 }
 
 .matrix-cell.chosen {

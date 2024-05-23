@@ -170,10 +170,6 @@ class SimplexMethod extends \App\Answer {
             $iterations[] = new SimplexIteration(previous: end($iterations));
         }
 
-//        header('Content-Type: text/plain');
-//        print_r($iterations[0]);
-//        exit;
-
         return $iterations;
     }
 
