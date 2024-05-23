@@ -122,7 +122,7 @@ button.special:hover {
     margin-bottom: 20px;
 }
 
-@media only screen and (max-width: 1280px) {
+@media only screen and (max-width: 1280px) and (min-width: 501px) {
     .main {
         width: calc(100% - 40px);
         margin: 20px;
@@ -131,14 +131,14 @@ button.special:hover {
 
 @media only screen and (max-width: 500px) {
     body {
-        font-size: 16pt;
+        font-size: 18pt;
     }
 
     h1 {
-        font-size: 18pt;
+        font-size: 20pt;
     }
     h2 {
-        font-size: 17pt;
+        font-size: 19pt;
     }
 
     .main {
